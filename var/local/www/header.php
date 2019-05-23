@@ -93,6 +93,7 @@
 <body onorientationchange="javascript:location.reload(true); void 0;">
 	<!-- ALBUM COVER BACKDROP -->
 	<div id="cover-backdrop"></div>
+	<div id="context-backdrop"></div>
 
 	<!-- HEADER -->	
 	<div id="menu-top" class="ui-header ui-bar-f ui-header-fixed slidedown" data-position="fixed" data-role="header" role="banner">
@@ -142,7 +143,7 @@
 	
 	<!-- PLAYBAR -->	
 	<div id="menu-bottom" class="btn-group btn-list ui-footer ui-bar-f ui-footer-fixed slidedown" data-position="fixed" data-role="footer" role="banner">
-		<div id="playbar">
+		<div id="playbar" class="visacc fancy">
 			<div id="playbar-cover"></div>
 			<div id="playbar-title">
 				<div id="playbar-currentsong"></div>

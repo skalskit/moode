@@ -73,7 +73,7 @@ jQuery(document).ready(function($) { 'use strict';
 	themeBack = 'rgba(' + THEME.json[SESSION.json['themename']]['bg_color'] + ',' + SESSION.json['alphablend'] +')';
 	themeMcolor = str2hex(THEME.json[SESSION.json['themename']]['tx_color']);
 	if (SESSION.json['adaptive'] == "No") {document.body.style.setProperty('--adaptmbg', themeBack);}
-	blurrr == true ? themeOp = .55 : themeOp = .95;
+	blurrr == true ? themeOp = .75 : themeOp = .95;
 
 	/*themeMback = 'rgba(' + THEME.json[SESSION.json['themename']]['bg_color'] + ',' + themeOp +')';
 	tempcolor = splitColor($('.dropdown-menu').css('background-color'));*/
@@ -189,7 +189,7 @@ jQuery(document).ready(function($) { 'use strict';
 	// playback
 	else {
 		$('#playback-panel').addClass('active');
-		$('#menu-bottom, #top-columns, #bottom-row').hide();
+		$('#menu-bottom').hide();
 		$('#playback-switch').show();
 		setTimeout(function() {
 	        customScroll('pl', parseInt(MPD.json['song']));
@@ -201,7 +201,7 @@ jQuery(document).ready(function($) { 'use strict';
 		$('#radio-panel').addClass('active');
 		$('.folder-view-btn, .tag-view-btn, .album-view-btn').removeClass('active');
 		$('.radio-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header').hide();
+		//$('#lib-albumcover, #lib-albumcover-header').hide();
 
 		if (currentView == 'radiolist') {
 			$('#ra-toggle-view i').removeClass('fa-bars').addClass('fa-th');
@@ -217,7 +217,7 @@ jQuery(document).ready(function($) { 'use strict';
 			    container: $('#radiocovers')
 			});
 			if (UI.radioPos >= 0) {
-				customScroll('radiocovers', UI.radioPos, 200);
+				customScroll('radiocovers', UI.radioPos, 0); // 200
 			}
 		}, 250);
 	}
@@ -232,15 +232,18 @@ jQuery(document).ready(function($) { 'use strict';
 		$('#library-panel').addClass('active');
 		$('.folder-view-btn, .album-view-btn, .radio-view-btn').removeClass('active');
 		$('.tag-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').hide();
+		$('#library-panel').removeClass('covers').addClass('tag');
+		//$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').hide();
 		setTimeout(function() {
-			$('img.lazy').lazyload({
-			    container: $('#lib-album')
-			});
+			if (UI.tagViewCovers) {
+				$('img.lazy').lazyload({
+				    container: $('#lib-album')
+				});
+			}
 			if (UI.libPos[0] >= 0) {
 			    $('#albumsList .lib-entry').removeClass('active');
 				$('#albumsList .lib-entry').eq(UI.libPos[0]).addClass('active');
-				customScroll('albums', UI.libPos[0], 200);
+				customScroll('albums', UI.libPos[0], 0); // 200
 				$('#albumsList .lib-entry').eq(UI.libPos[0]).click();
 			}
 		}, 500);
@@ -249,13 +252,14 @@ jQuery(document).ready(function($) { 'use strict';
 		$('#library-panel').addClass('active');
 		$('.folder-view-btn, .tag-view-btn, .radio-view-btn').removeClass('active');
 		$('.album-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header').show();
-		$('#top-columns, #bottom-row').css('display', 'none');
+		$('#library-panel').removeClass('tag').addClass('covers');
+		//$('#lib-albumcover, #lib-albumcover-header').show();
+		$('#bottom-row').css('display', '');
 		setTimeout(function() {
 			if (UI.libPos[1] >= 0) { // lib entry clicked or random album
 			    $('#albumcovers .lib-entry').removeClass('active');
 				$('#albumcovers .lib-entry').eq(UI.libPos[1]).addClass('active');
-				customScroll('albumcovers', UI.libPos[1], 200);
+				customScroll('albumcovers', UI.libPos[1], 0); // 200
 			}
 		}, 500);
 	}
@@ -266,9 +270,11 @@ jQuery(document).ready(function($) { 'use strict';
 
     // ViewSwitch buttons
 	$('.radio-view-btn').click(function(e){
+		//$('#container-browse').hide();
+		//$('#container-radio').show();
 		$('.folder-view-btn, .tag-view-btn, .album-view-btn').removeClass('active');
 		$('.radio-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header').hide();
+		//$('#lib-albumcover, #lib-albumcover-header').hide();
 
 		currentView = $('#ra-toggle-view i').hasClass('fa-bars') ? 'radiocover' : 'radiolist';
 		var result = sendMoodeCmd('POST', 'updcfgsystem', {'current_view': currentView}, true);
@@ -278,14 +284,16 @@ jQuery(document).ready(function($) { 'use strict';
 			    container: $('#radiocovers')
 			});
 			if (UI.radioPos >= 0) {
-				customScroll('radiocovers', UI.radioPos, 200);
+				customScroll('radiocovers', UI.radioPos, 0); // 200
 			}
 		}, 250);
 	});
 	$('.folder-view-btn').click(function(e){
+		//$('#container-radio').hide();
+		//$('#container-browse').show();
 		$('.tag-view-btn, .album-view-btn, .radio-view-btn').removeClass('active');
 		$('.folder-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header').hide();
+		//$('#lib-albumcover, #lib-albumcover-header').hide();
 
 		currentView = 'folder';
 		var result = sendMoodeCmd('POST', 'updcfgsystem', {'current_view': currentView}, true);
@@ -295,8 +303,9 @@ jQuery(document).ready(function($) { 'use strict';
 	$('.tag-view-btn').click(function(e){
 		$('.folder-view-btn, .album-view-btn, .radio-view-btn').removeClass('active');
 		$('.tag-view-btn').addClass('active');
-		$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').hide();
-		$('#top-columns, #bottom-row').css('display', 'flex');
+		$('#library-panel').removeClass('covers').addClass('tag');
+		//$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').hide();
+		//$('#top-columns, #bottom-row').css('display', 'flex');
 
 		currentView = 'tag';
 		var result = sendMoodeCmd('POST', 'updcfgsystem', {'current_view': currentView}, true);
@@ -308,25 +317,27 @@ jQuery(document).ready(function($) { 'use strict';
 			loadLibrary();
 		}
 		setTimeout(function() {
-			$('img.lazy').lazyload({
-			    container: $('#lib-album')
-			});
+			if (UI.tagViewCovers) {
+				$('img.lazy').lazyload({
+				    container: $('#lib-album')
+				});
+			}
 			if (UI.libPos[0] >= 0) { // lib entry clicked or random album
 			    $('#albumsList .lib-entry').removeClass('active');
 				$('#albumsList .lib-entry').eq(UI.libPos[0]).addClass('active');
-				customScroll('albums', UI.libPos[0], 200);
+				customScroll('albums', UI.libPos[0], 0); // 200
 				$('#albumsList .lib-entry').eq(UI.libPos[0]).click();
 			}
 			else if (UI.libPos[0] == -2) { // lib headers clicked
 			    $('#albumsList .lib-entry').removeClass('active');
-				$('#lib-album').scrollTo(0, 200);
-				$('#lib-artist').scrollTo(0, 200);
+				$('#lib-album').scrollTo(0, 0); // 200
+				$('#lib-artist').scrollTo(0, 0); // 200
 				UI.libPos[0] = -1;
 				storeLibPos(UI.libPos);
 			}
 			else if (UI.libPos[0] == -3) { // lib search performed
 			    $('#albumsList .lib-entry').removeClass('active');
-				$('#lib-album').scrollTo(0, 200);
+				$('#lib-album').scrollTo(0, 0); // 200
 				$('#lib-coverart-img').html('<a href="#notarget" data-toggle="context" data-target="#context-menu-lib-all">' + '<img class="lib-coverart" ' + 'src="' + UI.defCover + '"></a>');
 				$('#lib-albumname, #lib-artistname, #lib-albumyear, #lib-numtracks, #songsList').html('');
 				UI.libPos[0] = -1;
@@ -337,8 +348,9 @@ jQuery(document).ready(function($) { 'use strict';
 	$('.album-view-btn').click(function(e){
 		$('.folder-view-btn, .tag-view-btn, .radio-view-btn').removeClass('active');
 		$('.album-view-btn').addClass('active');
-		$('#top-columns, #bottom-row').css('display', 'none');
-		$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').show();
+		$('#library-panel').removeClass('tag').addClass('covers');
+		$('#bottom-row').css('display', '');
+		//$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').show();
 		$('#lib-albumcover').css('height', '100%');
 
 		currentView = 'album';
@@ -358,11 +370,11 @@ jQuery(document).ready(function($) { 'use strict';
 			if (UI.libPos[1] >= 0) { // lib entry clicked or random album
 			    $('#albumcovers .lib-entry').removeClass('active');
 				$('#albumcovers .lib-entry').eq(UI.libPos[1]).addClass('active');
-				customScroll('albumcovers', UI.libPos[1], 200);
+				customScroll('albumcovers', UI.libPos[1], 0); // 200
 			}
 			else if (UI.libPos[1] == -2 || UI.libPos[1] == -3) { // lib headers clicked or search performed
 			    $('#albumcovers .lib-entry').removeClass('active');
-				$('#lib-albumcover').scrollTo(0, 200);
+				$('#lib-albumcover').scrollTo(0, 0); // 200
 				UI.libPos[1] = -1;
 				storeLibPos(UI.libPos);
 			}
@@ -577,8 +589,33 @@ jQuery(document).ready(function($) { 'use strict';
 		}
     });
 
+	// click on playlist action menu button
+    $('.playlist').on('click', '.pl-action', function(e) {
+		// store posn for later use by action menu selection
+        UI.dbEntry[0] = $('.playlist .pl-action').index(this);
+
+		// store clock radio play name in UI.dbEntry[3]
+		if ($('#pl-' + (UI.dbEntry[0] + 1) + ' .pll2').html().substr(0, 2) == '<i') { // has icon (fa-microphone)
+			// radio station
+			var line2 = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pll2').html();
+			var station = line2.substr((line2.indexOf('</i>') + 4));
+			UI.dbEntry[3] = station.trim();
+		}
+		else {
+			// song file
+			var title = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pll1').html().trim();
+			var line2 = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pll2').text(); // artist - album
+			var artist = line2.substr(0, (line2.indexOf('-') - 1)); // strip off album
+			UI.dbEntry[3] = title + ', ' + artist;
+		}
+    });
+
     // click on playlist entry
-    $('.playlist, .ss-playlist').on('click', '.pl-entry', function(e) {
+    $('#playlist, .ss-playlist').on('click', '.pl-entry', function(e) {
+		var sender = e.target.className;
+		if (sender == 'pl-action' || sender == '') {
+			return;
+		}
 		var selector = $(this).parents('ul').hasClass('playlist') ? '.playlist' : '.ss-playlist';
         var pos = $(selector + ' .pl-entry').index(this);
 
@@ -587,27 +624,6 @@ jQuery(document).ready(function($) { 'use strict';
 
 		if (UI.mobile) { // for mobile scroll to top
 			$('html, body').animate({ scrollTop: 0 }, 'fast');
-		}
-    });
-
-	// click on playlist action menu button
-    $('.playlist').on('click', '.pl-action', function(e) {
-		// store posn for later use by action menu selection
-        UI.dbEntry[0] = $('.playlist .pl-action').index(this);
-
-		// store clock radio play name in UI.dbEntry[3]
-		if ($('#pl-' + (UI.dbEntry[0] + 1) + ' .pl-entry .pll2').html().substr(0, 2) == '<i') { // has icon (fa-microphone)
-			// radio station
-			var line2 = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pl-entry .pll2').html();
-			var station = line2.substr((line2.indexOf('</i>') + 4));
-			UI.dbEntry[3] = station.trim();
-		}
-		else {
-			// song file
-			var title = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pl-entry .pll1').html().trim();
-			var line2 = $('#pl-' + (UI.dbEntry[0] + 1) + ' .pl-entry .pll2').text(); // artist - album
-			var artist = line2.substr(0, (line2.indexOf('-') - 1)); // strip off album
-			UI.dbEntry[3] = title + ', ' + artist;
 		}
     });
 
@@ -963,7 +979,7 @@ jQuery(document).ready(function($) { 'use strict';
 			}
 
 			if ($('.album-view-btn').hasClass('active')) {
-				$('#bottom-row').css('display', 'none');
+				$('#bottom-row').css('display', '');
 			}
 		    $('#albumcovers .lib-entry').removeClass('active');
 		    $('#albumsList .lib-entry').removeClass('active');

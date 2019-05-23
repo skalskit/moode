@@ -65,9 +65,9 @@ a.btn.btn-medium.btn-primary {font-size:16px;}
 h6 {font-size: large;font-weight: 500;text-transform: capitalize;text-align: center;}
 .bootstrap-select .dropdown-menu {background-color:rgba(50,50,50,0.98);}
 .bootstrap-select .dropdown-menu li a {color:#eee;}
-.span5 {width:38%;}
-.span4 {padding:0;width:38%;}
-.span3 {width:24%;margin-left:0px;}
+#playback-queue {width:38%;}
+#playback-cover {padding:0;width:38%;}
+#playback-controls {width:24%;margin-left:0px;}
 .btn-group.bootstrap-select .btn {padding:2px 12px;margin-bottom:5px;}
 #players {margin-left:auto;margin-right:auto;text-align:center;}
 #players .btn {background:rgba(128,128,128,0.08);}
@@ -128,19 +128,19 @@ li.modal-dropdown-text:focus {color:#eee;}
 
 @media (max-width: 769px) {
 	body {padding-left: 0px;padding-right: 0px;}
-	.span3 {width:24%;margin-left:0px;}
+	#playback-controls {width:24%;margin-left:0px;}
 	.container-playback {padding: 0px;}
 	#pl-search, #lib-album-search, #pl-save, #set-fav {margin-left: 0;}
 	body.index {padding:0;}
 }
 @media (max-width: 479px) {
 	body {padding-left:0px;padding-right:0px;height:initial;}
-	.span3 {width:100%;}
+	#playback-controls {width:100%;}
 	.container2 {padding-left:2em;}
-	#extratags {padding-top:.45em;}
+	#extratags {padding-top:2px;}
 	.modal-sm {min-width:80%;max-width:80%;}
-	.span4 {width:100%;text-align:center;margin-left:auto;margin-right:auto;}
-	.span5 {width:100%;}
+	#playback-cover {width:100%;text-align:center;margin-left:auto;margin-right:auto;}
+	#playback-queue {width:100%;}
 	.playlist .active .speaker {left:2px;}
 	.input-large {width: initial;}
  	#container-playlist {position:relative;width:100%;height:unset;margin:0;visibility:hidden;}
@@ -169,12 +169,12 @@ li.modal-dropdown-text:focus {color:#eee;}
 	#mt1, #mt2, #mt3 {font-size:inherit;}
 	#mt1 {margin:4rem 1.5rem 0rem 1.5rem;}
 	#mt3 {margin-right:5px;float:right;margin-top:25vh;}
-	#mt1 .btn, #mt3 .btn {font-size:1.2rem;margin:.5rem 1.25rem 1.75rem 1.25rem;padding:0 .5rem;/*color:var(--textvariant);*/}
+	#mt1 .btn, #mt3 .btn {font-size:1.2rem;margin:.5rem 1.25rem 1.75rem 1.25rem;padding:0 .5rem;}
 	#mt1 .btn i {min-width:1.25rem;}
 	#mt2 {display:block;}
 	#mt3 .btn-primary, #mt1 .btn-primary {color:var(--accentxts);}
-	.tab-content.visacc #mt1 .btn {color:var(--textvariant);}
-	.tab-content.visacc #mt1 .btn-primary {color:var(--adapttext);background-color:var(--btnshade2);}
+	#content.visacc #mt1 .btn {color:var(--textvariant);}
+	#content.visacc #mt1 .btn-primary {color:var(--adapttext);background-color:var(--btnshade2);}
 	#mt2 > .btn {font-size:1.75em;}
 	#msingle {display:none;}
 	#maddfav i {font-size:1.1em;}
@@ -182,7 +182,7 @@ li.modal-dropdown-text:focus {color:#eee;}
 	#pl-search, #lib-album-search, #pl-save, #ra-search {margin-left: 0px;}
 	.database li {margin-left:2px;margin-right:5px;}
 	/* display:flex & playback stuff */
-	.no-fluid {flex-direction:column-reverse;}
+	#playback-divs {flex-direction:column-reverse;}
 	.covers {padding-top: 0px;margin-top: 0px;}
 	.btn-toolbar, .volumemute, #volbtns, #volknob, #togglebtns, #timeknob {display:none;}
 	#currentsong {font-weight:bold;}
@@ -202,15 +202,16 @@ li.modal-dropdown-text:focus {color:#eee;}
 	body {font-size:var(--pbfont);}
 	#menu-top .dropdown-menu > li > a {font-size:1.15rem;}
 	.lib-artistname-meta, .lib-albumyear-meta, .lib-numtracks-meta {font-size:calc(0.65em + 1vmin);}
-	#mt2 .btn {font-size:2.75rem;padding:0 1em;width:25%;}
-	.playlist span {line-height:normal;margin-left:calc(3.5rem + 1vmin);display:block;}
+	/*#mt2 .btn {font-size:2.75rem;padding:0 1em;width:25%;}
+	.playlist span {line-height:normal;margin-left:calc(3.5rem + 1vmin);display:block;}*/
+	#mt2 .btn {font-size:2.75rem;padding:.5em .25em;width:25%;}
+	#playlist .pll1, #playlist .pll2 {line-height:normal;margin-left:calc(3.75rem + 1vmin);display:block;}
 	input[type="text"] {font-size:1em;}
 	#menu-settings {font-size:1.65rem;padding:0 .5em;}
 	#menu-settings i {font-size:1rem;}
-	.playlist span {margin-left:calc(3.5rem + 1vmin);}
 	.playlist {padding:0 0 8rem 0;min-height:33vh;}
-	.playlist li, .playlist .active {padding-left:.5em;}
-	.playlist li:before {font-size:unset;}
+	/*.playlist li, .playlist .active {padding-left:.5em;}*/
+	.playlist li:before {margin-top:-.25px;/*font-size:unset;*/}
 	#lib-albumcover {left:0;}
 	#albumsList li {max-width:calc(50vw - 1px) !important;}
 	#albumcovers li, .database-radio li {width:16em;font-size:.8em;padding-bottom:1em;}
@@ -239,7 +240,7 @@ li.modal-dropdown-text:focus {color:#eee;}
 	#playbar-time, #playbar-total {line-height:1.5rem;}
 	#playbar-controls .btn {padding-left:1rem;padding-right:1rem;font-size:1.55em;}
 	#playbar-toggles {position:absolute;right:1rem;right:calc(env(safe-area-inset-right) + 1rem);bottom:.75rem;height:unset;width:unset;top:unset;left:unset;transform:none;display:block;}
-	#playbar-toggles .btn {padding:0 .6rem 2px .6rem;width:unset;height:unset;line-height:14px;}
+	#playbar-toggles .btn {padding:0 .6rem 2px .6rem;margin:0 .25em;width:unset;height:unset;line-height:14px;}
 	#playbar-timeline {display:none;}
 	#playbar-toggles .coverview {display:none;}
 	#playbar-toggles .ralbum {display:inline-block;}
@@ -321,7 +322,7 @@ li.modal-dropdown-text:focus {color:#eee;}
 	#context-menu-playback .dropdown-menu {min-width:150px;}
 	.playlist {font-size:1.2em;}
 	.playlist li:before {width:1.75em;}
-	.playlist span {margin-left:calc(2.75rem + 1vmin;)}
+	#playlist .pll1, #playlist .pll2 {margin-left:calc(2.75rem + 1vmin;)}
 	#playbar-title {width:calc(60vw - 6rem);}
 }
 /* iPhone5 landscape */
@@ -332,7 +333,7 @@ li.modal-dropdown-text:focus {color:#eee;}
 
 /* coverview for large screens */
 @media (min-height: 1080px) {
-	#ss-backdrop {filter: blur(40px);}
+	#ss-backdrop {filter: blur(20px);}
 	#ss-currentsong {font-size:1.5em;}
 	#ss-currentalbum, #ss-currentartist {font-size:1.25em;}
 	.hudui {font-size:unset}
@@ -368,6 +369,7 @@ li.modal-dropdown-text:focus {color:#eee;}
 	/* playbar */
 	#playbar-title {font-size:.9rem;}
 	.alphabits ul li {line-height:1em;}
+	#countdown-display {margin-top:-1em;}
 	/* alphabits */
 	#index-albumcovers {display:block;}
 	#index-browse {display:block;}
@@ -386,41 +388,45 @@ li.modal-dropdown-text:focus {color:#eee;}
 	#menu-top {padding-top:calc(env(safe-area-inset-top) - .5em);}
 	.viewswitch {top:calc(env(safe-area-inset-top) - .5em);}
 	.btnlist.btnlist-top.btnlist-top-pl, .btnlist.btnlist-top.btnlist-top-lib {top:calc(env(safe-area-inset-top) - .25em);}
-	#songsList {padding-bottom:calc(5.5em + env(safe-area-inset-bottom));}
+	#songsList {padding-bottom:calc(8em + env(safe-area-inset-bottom));}
 	.ui-pnotify {top: calc(env(safe-area-inset-top));right: calc(env(safe-area-inset-right) + 1em);}
+	.playlist {min-height:30vh;}
 	#playbar-cover {margin-left:.5em;border-radius:.1em .1em .1em 50%;}
 	#playbar-toggles {right:calc(env(safe-area-inset-right) + 1rem);bottom:1rem;}
 	#timeline {width:75%;}
 	#mt1 {margin:6rem 1.5rem 0rem 1.5rem;}
+	#mt1 .btn, #mt3 .btn {font-size:1.4rem;line-height:1.4rem;margin:.5rem 1.6rem 1.75rem 1.6rem;padding:.25rem .55rem .3rem;}
 	.timeline-bg {margin-top:1px;}
 	#currentsong, #currentalbum, #currentartist {padding-top:1.75rem;}
-	.busy-spinner {top:calc(env(safe-area-inset-top) + .57rem);}
+	.db-spinner {top:calc(env(safe-area-inset-top) + .57rem);}
 	.db-spinsync {top:calc(env(safe-area-inset-top) + -.2rem);}
 	.config-exit {top:calc(env(safe-area-inset-top) - .5rem);}
 	#radio-panel .viewswitch {top:calc(env(safe-area-inset-top) - .5em);}
 	.database-radiolist li .db-entry {margin-top:2px;}
 	#config-tabs {top:calc(env(safe-area-inset-top) - .5rem);}
+	#playback-switch {top:calc(env(safe-area-inset-top) - .2rem);}
 	.database-radiolist .db-entry, .database-radiolist .cover-menu {font-size:1.2em;}
+	.tab-content.fancy > .active {animation: fadeIn linear .25s;} /* fancy on tab-content for now */
 }
 
 @media (width: 896px) and (height:414px) {
-	.span5 {margin-left:calc(env(safe-area-inset-left) - 2rem);}
-	.span4 {margin-right:calc(env(safe-area-inset-right) - 2rem);}
+	#playback-queue {margin-left:calc(env(safe-area-inset-left) - 2rem);}
+	#playback-cover {margin-right:calc(env(safe-area-inset-right) - 2rem);}
 }
 
 @keyframes colorchange {
-	0% {background-color: rgba(32,32,32,0.8);}
-	20% {background-color: rgba(49,76,172,0.8);}
-	40% {background-color: rgba(130,105,151,0.8);}
-	60% {background-color: rgba(255,103,69,0.8);}
-	80% {background-color: rgba(33,229,241,0.8);}
-	100% {background-color: rgba(32,32,32,0.8);}
+	0% {background-color: rgba(32,32,32,1);}
+	20% {background-color: rgba(49,76,172,1);}
+	40% {background-color: rgba(130,105,151,1);}
+	60% {background-color: rgba(255,103,69,1);}
+	80% {background-color: rgba(33,229,241,1);}
+	100% {background-color: rgba(32,32,32,1);}
 }
 
 @keyframes colors2 {
 	0%   {background-color: rgba(0,0,0,0.8);}
 	25% {background-color: rgba(10,18,43,0.8);}
-	50% {background-color: var(--shiftybg);}
+	50% {background-color: rgba(0,0,0,0.8);}
 	75% {background-color: rgba(54,15,22,0.8);}
 	100% {background-color: rgba(0,0,0,0.8);}
 }
