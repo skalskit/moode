@@ -22,7 +22,7 @@
         var elements = this;
         var $container;
         var settings = {
-            threshold       : 0,
+            threshold       : 200,
             failure_limit   : 0,
             event           : "scroll.lazyload",
             effect          : "show",

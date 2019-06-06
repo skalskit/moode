@@ -118,26 +118,6 @@ jQuery(document).ready(function($) { 'use strict';
 		$('#playbtns, #togglebtns').show();
 	}
 
-	// set screen saver style
-	if (SESSION.json['scnsaver_style'] == 'Animated') {
-		$('#ss-style').css('background', '');
-		$('#ss-style').css('animation', 'colors2 60s infinite');
-		$('#ss-style, #ss-backdrop').css('display', '');
-	}
-	else if (SESSION.json['scnsaver_style'] == 'Gradient') {
-		$('#ss-style').css('animation', 'initial');
-		$('#ss-style').css('background', 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.60) 25%,rgba(0,0,0,0.75) 40%, rgba(0,0,0,.8) 60%, rgba(0,0,0,.9) 100%)');
-		$('#ss-style, #ss-backdrop').css('display', '');
-	}
-	else if (SESSION.json['scnsaver_style'] == 'Theme') {
-		$('#ss-style, #ss-backdrop').css('display', 'none');		
-	}
-	else if (SESSION.json['scnsaver_style'] == 'Pure Black') {
-		$('#ss-style').css('animation', 'initial');
-		$('#ss-style').css('background', 'rgba(0,0,0,1)');
-		$('#ss-style, #ss-backdrop').css('display', '');
-	}
-
  	// set clock radio icon state
 	if (SESSION.json['clkradio_mode'] == 'Clock Radio' || SESSION.json['clkradio_mode'] == 'Sleep Timer') {
 		$('#clockradio-icon').removeClass('clockradio-off')
@@ -213,7 +193,7 @@ jQuery(document).ready(function($) { 'use strict';
 		}
 
 		setTimeout(function() {
-			$('img.lazy').lazyload({
+			$('img.rlazy').lazyload({
 			    container: $('#radiocovers')
 			});
 			if (UI.radioPos >= 0) {
@@ -236,7 +216,7 @@ jQuery(document).ready(function($) { 'use strict';
 		//$('#lib-albumcover, #lib-albumcover-header, #index-albumcovers').hide();
 		setTimeout(function() {
 			if (UI.tagViewCovers) {
-				$('img.lazy').lazyload({
+				$('img.tlazy').lazyload({
 				    container: $('#lib-album')
 				});
 			}
@@ -280,9 +260,9 @@ jQuery(document).ready(function($) { 'use strict';
 		var result = sendMoodeCmd('POST', 'updcfgsystem', {'current_view': currentView}, true);
 
 		setTimeout(function() {
-			$('img.lazy').lazyload({
-			    container: $('#radiocovers')
-			});
+				$('img.rlazy').lazyload({
+				    container: $('#radiocovers')
+				});	
 			if (UI.radioPos >= 0) {
 				customScroll('radiocovers', UI.radioPos, 0); // 200
 			}
@@ -318,7 +298,7 @@ jQuery(document).ready(function($) { 'use strict';
 		}
 		setTimeout(function() {
 			if (UI.tagViewCovers) {
-				$('img.lazy').lazyload({
+				$('img.tlazy').lazyload({
 				    container: $('#lib-album')
 				});
 			}
@@ -612,18 +592,23 @@ jQuery(document).ready(function($) { 'use strict';
 
     // click on playlist entry
     $('#playlist, .ss-playlist').on('click', '.pl-entry', function(e) {
-		var sender = e.target.className;
-		if (sender == 'pl-action' || sender == '') {
+		if ($('#playlist').hasClass('select')) {
+	        $(this).toggleClass('selected');
 			return;
-		}
-		var selector = $(this).parents('ul').hasClass('playlist') ? '.playlist' : '.ss-playlist';
-        var pos = $(selector + ' .pl-entry').index(this);
+		} else {
+			var sender = e.target.className;
+			if (sender == 'pl-action' || sender == '') {
+				return;
+			}
+			var selector = $(this).parents('ul').hasClass('playlist') ? '.playlist' : '.ss-playlist';
+	        var pos = $(selector + ' .pl-entry').index(this);
 
-        sendMpdCmd('play ' + pos);
-        $(this).parent().addClass('active');
+	        sendMpdCmd('play ' + pos);
+	        $(this).parent().addClass('active');
 
-		if (UI.mobile) { // for mobile scroll to top
-			$('html, body').animate({ scrollTop: 0 }, 'fast');
+			if (UI.mobile) { // for mobile scroll to top
+				$('html, body').animate({ scrollTop: 0 }, 'fast');
+			}
 		}
     });
 
@@ -877,7 +862,7 @@ jQuery(document).ready(function($) { 'use strict';
 		    }
 			$('#database-radio').scrollTo(0, 200);
 
-			$('img.lazy').lazyload({
+			$('img.rlazy').lazyload({
 			    container: $('#radiocovers')
 			});		
 		}, 750);
@@ -1217,9 +1202,10 @@ jQuery(document).ready(function($) { 'use strict';
 	$('#screen-saver, #playback-panel, #library-panel, #folder-panel, #radio-panel, #menu-bottom').click(function(e) {
 		//console.log('resetscnsaver: timeout (' + SESSION.json['scnsaver_timeout'] + ')');
 		if ($('#screen-saver').css('display') == 'block' || SESSION.json['scnsaver_timeout'] != 'Never') {
+			$('#ss-style').css('animation', '');
 			$('#screen-saver').hide();
 			$('#ss-hud').hide();
-			$('#playback-panel, #library-panel, #radio-panel').removeClass('hidden');
+			$('#playback-panel, #library-panel, #folder-panel, #radio-panel').removeClass('hidden');
 			$('#menu-top').show();
 			if (currentView.indexOf('playback') == -1) {
 				$('#menu-bottom, .viewswitch').css('display', 'flex');
@@ -1235,6 +1221,47 @@ jQuery(document).ready(function($) { 'use strict';
 		}
 	});
 
+	// manages toolbar when scrolling
+	$(window).on('scroll', function(e) {
+		//console.log('window scroll');
+		if ($('#playback-panel').hasClass('active') && UI.mobile) {
+			if ($(window).scrollTop() > 1 && !showMenuTopW) {
+				//console.log('window scroll, scrollTop() > 1 && !showMenuTopW');
+				if (UI.mobile) {
+					$('#mobile-toolbar').css('display', 'none');
+					$('#container-playlist').css('visibility','visible');
+					$('#menu-bottom').css('display', 'block');
+				}
+				$('#menu-top').css('height', $('#menu-top').css('line-height'));
+				$('#menu-top').css('backdrop-filter', 'blur(20px)');
+				showMenuTopW = true;
+			}
+			else if ($(window).scrollTop() == '0' ) {
+				//console.log('window scroll, scrollTop() = 0');
+				if (UI.mobile) {
+					$('#container-playlist').css('visibility','hidden');
+					$('#mobile-toolbar').css('display', 'block');
+					if (currentView.indexOf('playback') !== -1) {
+						$('#menu-bottom').css('display', 'none');
+					}
+				}
+				$('#menu-top').css('height', '0');
+				$('#menu-top').css('backdrop-filter', '');
+				showMenuTopW = false;
+			}
+		}
+	});
+
+	// select/cut/paste buttons
+	$('#selectcancel').click(function(e) {
+		console.log('later groo');
+		$('#cutpaste').css('display', 'none');
+		$('#playlist').removeClass('select');
+		$('#playlist li').removeClass('selected');
+		$('#playbar').css('display', 'flex');
+	});
+		
+
 	// info button (i) show/hide toggle
 	$('.info-toggle').click(function(e) {
 		var spanId = '#' + $(this).data('cmd');
@@ -1245,4 +1272,5 @@ jQuery(document).ready(function($) { 'use strict';
 			$(spanId).addClass('hide');
 		}
 	});
+	
 });

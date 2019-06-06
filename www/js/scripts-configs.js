@@ -183,4 +183,23 @@ jQuery(document).ready(function($){ 'use strict';
 			$(spanId).addClass('hide');
 		}
     });
+	
+	// manages toolbar when scrolling
+	$(window).on('scroll', function(e) {
+		//console.log('window scroll');
+			if ($(window).scrollTop() > 1 && !showMenuTopW) {
+				//console.log('window scroll, scrollTop() > 1 && !showMenuTopW');
+				$('#menu-top').css('height', $('#menu-top').css('line-height'));
+				$('#menu-top').css('backdrop-filter', 'blur(20px)');
+				$('#menu-top').css('background-color', themeMback);
+				showMenuTopW = true;
+			}
+			else if ($(window).scrollTop() == '0' ) {
+				//console.log('window scroll, scrollTop() = 0');
+				$('#menu-top').css('height', '0');
+				$('#menu-top').css('backdrop-filter', '');
+				$('#menu-top').css('background-color', '');
+				showMenuTopW = false;
+			}
+	});
 });

@@ -143,6 +143,14 @@
 	
 	<!-- PLAYBAR -->	
 	<div id="menu-bottom" class="btn-group btn-list ui-footer ui-bar-f ui-footer-fixed slidedown" data-position="fixed" data-role="footer" role="banner">
+		<div id="cutpaste">
+			<div id="cpbuttons">
+				<button id="selecttofirst" class="btn btn-cmd"><i class="far fa-chevron-double-down"></i></button>
+				<button id="selectcancel" class="btn btn-cmd">Cancel</button>
+				<button id="selectcut" class="btn btn-cmd">Cut</button>
+				<button id="selecttolast" class="btn btn-cmd"><i class="far fa-chevron-double-up"></i></button>
+			</div>
+		</div>
 		<div id="playbar" class="visacc fancy">
 			<div id="playbar-cover"></div>
 			<div id="playbar-title">
