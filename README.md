@@ -1,5 +1,7 @@
 # moOde audio player
 
+Modify to add FM and DAB+ radio
+
 Moode Audio Player is a derivative of the wonderful WebUI audio player client for MPD originally designed and coded by Andrea Coiutti and Simone De Gregori, and subsequently enhanced by early efforts from the RaspyFi/Volumio projects.
 
 moOde provides a beautifully designed and responsive user interface, an extensive set of Audiophile-class features and an active Forum that provides top notch troubleshooting, interesting discussion on a variety of audio topics and an International user community of audio enthusiasts.
